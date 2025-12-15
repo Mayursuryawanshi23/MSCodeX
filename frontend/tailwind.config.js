@@ -1,10 +1,20 @@
 /** @type {import('tailwindcss').Config} */
 export default {
+  darkMode: 'class',
   content: [
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
+    // Custom responsive breakpoints for mobile devices
+    screens: {
+      'xs': '375px',  // Small phones (iPhone SE)
+      'sm': '640px',  // Phones
+      'md': '768px',  // Tablets
+      'lg': '1024px', // Laptops
+      'xl': '1280px', // Desktops
+      '2xl': '1536px', // Large screens
+    },
     extend: {
       colors: {
         primary: {
@@ -69,6 +79,25 @@ export default {
       borderColor: {
         'theme-border': '#333333',
         'theme-border-light': '#444444',
+      },
+      animation: {
+        'float': 'float 8s ease-in-out infinite',
+        'pulse': 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+      },
+      transitionDuration: {
+        '150': '150ms',
+        '200': '200ms',
+        '300': '300ms',
+      },
+      zIndex: {
+        '0': '0',
+        '1': '1',
+        '5': '5',
+        '10': '10',
+        '20': '20',
+        '30': '30',
+        '40': '40',
+        '50': '50',
       },
     },
   },

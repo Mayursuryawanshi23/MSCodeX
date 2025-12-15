@@ -42,11 +42,11 @@ const SignUp = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black flex items-center justify-center px-4 relative overflow-hidden">
+    <div className="min-h-screen bg-black flex items-center justify-center px-4 sm:px-6 py-6 sm:py-0 relative overflow-hidden">
       {/* Animated background gradient */}
       <div className="absolute inset-0 opacity-20">
-        <div className="absolute top-0 right-1/4 w-96 h-96 bg-blue-600/30 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-green-600/30 rounded-full blur-3xl"></div>
+        <div className="absolute top-0 right-1/4 w-64 sm:w-96 h-64 sm:h-96 bg-blue-600/30 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-0 left-1/4 w-64 sm:w-96 h-64 sm:h-96 bg-green-600/30 rounded-full blur-3xl"></div>
       </div>
 
       {/* Background Grid */}
@@ -58,74 +58,74 @@ const SignUp = () => {
       </div>
 
       <div className="relative w-full max-w-md z-10">
-        {/* Card */}
-        <div className="glass border border-green-500/30 rounded-2xl p-8 shadow-2xl backdrop-blur-md">
+        {/* Card - Responsive Padding */}
+        <div className="glass border border-green-500/30 rounded-2xl p-6 sm:p-8 shadow-2xl backdrop-blur-md">
           {/* Header */}
-          <div className="text-center mb-8">
-            <div className="w-12 h-12 rounded-lg flex items-center justify-center font-bold text-black text-lg mx-auto mb-4 shadow-lg" style={{background: 'linear-gradient(135deg, #10b981, #3b82f6)'}}>CX</div>
-            <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-green-400 to-blue-400 mb-2">Create Account</h1>
-            <p className="text-gray-400 text-sm">Join CodeX and start building today</p>
+          <div className="text-center mb-6 sm:mb-8">
+            <div className="w-10 sm:w-12 h-10 sm:h-12 rounded-lg flex items-center justify-center font-bold text-black text-base sm:text-lg mx-auto mb-3 sm:mb-4 shadow-lg" style={{background: 'linear-gradient(135deg, #10b981, #3b82f6)'}}>CY</div>
+            <h1 className="text-2xl sm:text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-green-400 to-blue-400 mb-2">Create Account</h1>
+            <p className="text-gray-400 text-xs sm:text-sm">Join CatalyX and start building today</p>
           </div>
 
           {/* Form */}
-          <form onSubmit={submitForm} className="space-y-5">
+          <form onSubmit={submitForm} className="space-y-4 sm:space-y-5">
             {/* Full Name Input */}
             <div>
-              <label className="block text-gray-300 text-sm font-semibold mb-2">Full Name</label>
+              <label className="block text-gray-300 text-xs sm:text-sm font-semibold mb-2">Full Name</label>
               <input
                 onChange={(e) => { setFullName(e.target.value) }}
                 value={fullName}
                 type="text"
                 placeholder="John Doe"
                 required
-                className="w-full px-4 py-3 bg-black/50 border border-green-500/30 rounded-lg text-white placeholder-gray-600 focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-500/30 transition-all duration-200"
+                className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-black/50 border border-green-500/30 rounded-lg text-white placeholder-gray-600 focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-500/30 transition-all duration-200 text-sm"
               />
             </div>
 
             {/* Email Input */}
             <div>
-              <label className="block text-gray-300 text-sm font-semibold mb-2">Email Address</label>
+              <label className="block text-gray-300 text-xs sm:text-sm font-semibold mb-2">Email Address</label>
               <input
                 onChange={(e) => { setEmail(e.target.value) }}
                 value={email}
                 type="email"
                 placeholder="you@example.com"
                 required
-                className="w-full px-4 py-3 bg-black/50 border border-green-500/30 rounded-lg text-white placeholder-gray-600 focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-500/30 transition-all duration-200"
+                className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-black/50 border border-green-500/30 rounded-lg text-white placeholder-gray-600 focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-500/30 transition-all duration-200 text-sm"
               />
             </div>
 
             {/* Password Input */}
             <div>
-              <label className="block text-gray-300 text-sm font-semibold mb-2">Password</label>
+              <label className="block text-gray-300 text-xs sm:text-sm font-semibold mb-2">Password</label>
               <input
                 onChange={(e) => { setPwd(e.target.value) }}
                 value={pwd}
                 type="password"
                 placeholder="••••••••"
                 required
-                className="w-full px-4 py-3 bg-black/50 border border-green-500/30 rounded-lg text-white placeholder-gray-600 focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-500/30 transition-all duration-200"
+                className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-black/50 border border-green-500/30 rounded-lg text-white placeholder-gray-600 focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-500/30 transition-all duration-200 text-sm"
               />
             </div>
 
             {/* Terms */}
-            <label className="flex items-start">
-              <input type="checkbox" className="w-4 h-4 bg-black/50 border border-green-500/30 rounded cursor-pointer accent-green-500 mt-0.5" required />
-              <span className="ml-2 text-gray-400 text-xs">I agree to the <Link to="#" className="text-green-400 hover:text-green-300">Terms of Service</Link> and <Link to="#" className="text-green-400 hover:text-green-300">Privacy Policy</Link></span>
+            <label className="flex items-start gap-2">
+              <input type="checkbox" className="w-4 h-4 bg-black/50 border border-green-500/30 rounded cursor-pointer accent-green-500 mt-0.5 flex-shrink-0" required />
+              <span className="text-gray-400 text-xs">I agree to the <Link to="#" className="text-green-400 hover:text-green-300">Terms of Service</Link> and <Link to="#" className="text-green-400 hover:text-green-300">Privacy Policy</Link></span>
             </label>
 
             {/* Sign Up Button */}
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3 bg-gradient-to-r from-green-600 to-green-500 hover:from-green-500 hover:to-green-400 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold rounded-lg transition-all duration-200 shadow-lg hover:shadow-green-500/25 mt-6"
+              className="w-full py-2 sm:py-3 bg-gradient-to-r from-green-600 to-green-500 hover:from-green-500 hover:to-green-400 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold rounded-lg transition-all duration-200 shadow-lg hover:shadow-green-500/25 mt-4 sm:mt-6 text-sm sm:text-base"
             >
               {loading ? "Creating Account..." : "Create Account"}
             </button>
           </form>
 
           {/* Divider */}
-          <div className="relative my-6">
+          <div className="relative my-4 sm:my-6">
             <div className="absolute inset-0 flex items-center">
               <div className="w-full border-t border-green-500/20"></div>
             </div>
@@ -137,14 +137,14 @@ const SignUp = () => {
           {/* Login Link */}
           <Link
             to="/login"
-            className="w-full py-3 border border-green-500/50 text-green-400 hover:bg-green-500/10 font-semibold rounded-lg transition-all duration-200 text-center block"
+            className="w-full py-2 sm:py-3 border border-green-500/50 text-green-400 hover:bg-green-500/10 font-semibold rounded-lg transition-all duration-200 text-center block text-sm sm:text-base"
           >
             Sign In
           </Link>
         </div>
 
         {/* Footer Text */}
-        <p className="text-center text-gray-500 text-xs mt-6">
+        <p className="text-center text-gray-500 text-xs mt-4 sm:mt-6">
           Already have an account? <Link to="/login" className="text-green-400 hover:text-green-300 transition-colors">Sign in here</Link>
         </p>
       </div>

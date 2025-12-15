@@ -19,6 +19,13 @@ const connectDB = async () => {
       dbName: defaultDbName,
       serverSelectionTimeoutMS: 10000,
       socketTimeoutMS: 45000,
+      // Connection pooling for better performance with multiple users
+      maxPoolSize: 10,
+      minPoolSize: 5,
+      // Retry logic for resilience
+      retryWrites: true,
+      // Optimized for read-heavy operations
+      readPreference: 'primaryPreferred',
     };
 
     // Connect to the provided MongoDB Atlas URI using the selected DB name

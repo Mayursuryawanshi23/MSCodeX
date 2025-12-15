@@ -7,13 +7,32 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Dark theme (default) */
+html, html.dark {
+  color-scheme: dark;
+  background-color: #000000;
+}
+
+/* Light theme */
+html.light {
+  color-scheme: light;
+  background-color: #ffffff;
+}
+
 body {
   background-color: #000000;
   color: #fff;
   overflow-x: hidden;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+html.light body {
+  background-color: #f8f9fa;
+  color: #1f2937;
 }
 
 :root {
+  /* Dark theme colors */
   --bg: #000000;
   --surface: #0b1220;
   --card: #0f1724;
@@ -22,6 +41,36 @@ body {
   --primary-600: #1d4ed8; /* blue-700 */
   --accent: #10b981; /* green-600 */
   --glass: rgba(11, 18, 32, 0.6);
+  --text: #ffffff;
+  --text-muted: #d1d5db;
+}
+
+html.light {
+  --bg: #ffffff;
+  --surface: #f3f4f6;
+  --card: #e5e7eb;
+  --muted: #6b7280;
+  --primary-500: #3b82f6;
+  --primary-600: #1d4ed8;
+  --accent: #059669;
+  --glass: rgba(243, 244, 246, 0.8);
+  --text: #1f2937;
+  --text-muted: #6b7280;
+}
+
+/* Improve light theme contrast and readability */
+html.light {
+  --bg: #ffffff;
+  --surface: #ffffff; /* page surface */
+  --card: #ffffff;
+  --muted: #6b7280;
+  --primary-500: #0b74ff;
+  --primary-600: #0956c6;
+  --accent: #059669;
+  --glass: rgba(255, 255, 255, 0.8);
+  --text: #0f1724; /* darker text for contrast */
+  --text-muted: #475569;
+  --border: rgba(15,23,36,0.08);
 }
 
 .inputBox{
@@ -140,3 +189,127 @@ body {
 
 /* Glass utility enhanced */
 .glass{ background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); border: 1px solid rgba(255,255,255,0.04); border-radius: 12px; padding: 12px; }
+
+/* Support mapping common hard-coded Tailwind dark classes to CSS variables when light theme is active
+  This helps the theme toggle affect elements that still use utility classes like bg-black or text-white */
+html.light .bg-black { background-color: var(--bg) !important; }
+html.light .text-white { color: var(--text) !important; }
+html.light .text-gray-100 { color: var(--text-muted) !important; }
+html.light .text-gray-300 { color: var(--text-muted) !important; }
+html.light .text-gray-400 { color: var(--text-muted) !important; }
+html.light .bg-black\/50 { background-color: rgba(243,243,244,0.6) !important; }
+html.light .bg-black\/60 { background-color: rgba(243,243,244,0.65) !important; }
+html.light .bg-black\/95 { background-color: rgba(243,243,244,0.95) !important; }
+html.light .border-gray-800\/50 { border-color: rgba(0,0,0,0.06) !important; }
+html.light .border-gray-800 { border-color: rgba(0,0,0,0.08) !important; }
+html.light .bg-black\/40 { background-color: rgba(243,243,244,0.4) !important; }
+
+/* Ensure body-level styles reflect variables */
+html.light body { background-color: var(--bg) !important; color: var(--text) !important; }
+
+/* Landing page overlay that adapts to theme */
+.bg-landing-overlay {
+  /* much lighter at the top so video shows through beneath hero */
+  background: linear-gradient(to bottom, rgba(0,0,0,0.06), rgba(0,0,0,0.12), rgba(0,0,0,0.5));
+}
+html.light .bg-landing-overlay {
+  background: linear-gradient(to bottom, rgba(255,255,255,0.3), rgba(255,255,255,0.5), rgba(255,255,255,0.8));
+}
+
+/* Header surface adapts to theme */
+.header-surface {
+  background-color: rgba(11,18,32,0.4);
+}
+html.light .header-surface {
+  background-color: rgba(255,255,255,0.85);
+  border-color: var(--border) !important;
+}
+
+/* Ensure CTA buttons and other important elements have strong contrast in light theme */
+html.light .btn-primary {
+  background: linear-gradient(90deg, var(--primary-600), var(--primary-500));
+  color: #fff;
+}
+
+/* Mobile menu styles */
+.mobile-menu-backdrop { background: rgba(2,6,23,0.6); }
+html.light .mobile-menu-backdrop { background: rgba(255,255,255,0.6); }
+.mobile-menu { transition: transform 0.22s ease; }
+.mobile-menu a { color: var(--text); }
+html.light .mobile-menu { background: var(--surface); }
+html.light .mobile-menu .btn-primary { color: #fff; }
+
+/* Ensure buttons and container have clear borders in light theme */
+html.light .card, html.light .glass, html.light .header-surface {
+  border: 1px solid var(--border);
+}
+
+/* Performance optimization: GPU acceleration for smooth animations */
+body {
+  will-change: transform;
+}
+
+/* Smooth scrolling optimization */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Animation for floating orbs */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px) translateX(0px);
+  }
+  25% {
+    transform: translateY(-20px) translateX(10px);
+  }
+  50% {
+    transform: translateY(-40px) translateX(-10px);
+  }
+  75% {
+    transform: translateY(-20px) translateX(15px);
+  }
+}
+
+/* Animation for background drift */
+@keyframes drift {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(50px, 50px);
+  }
+}
+
+/* Animation for background shift */
+@keyframes bgShift {
+  0%, 100% {
+    background-position: 0% 0%;
+  }
+  50% {
+    background-position: 100% 100%;
+  }
+}
+
+/* Smooth transitions for navigation and elements */
+a, button, input, select, textarea {
+  transition: all 0.2s ease-out;
+}
+
+/* Disable transitions on scroll for better performance */
+.no-transition {
+  transition: none !important;
+}
+
+/* Optimize images and heavy elements */
+img {
+  will-change: auto;
+}
+
+/* Smooth transform for cards and containers */
+.card, .glass, [role="button"] {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+

@@ -1,5 +1,5 @@
 var express = require('express');
-const { signUp, login, createProj, saveProject, getProjects, getProject, deleteProject, editProject, getUserData, createRunJob, updateRunJob, getRunHistory, createRunSnapshot } = require('../controllers/userController');
+const { signUp, login, createProj, saveProject, getProjects, getProject, deleteProject, editProject, getUserData, createRunJob, updateRunJob, getRunHistory, deleteRunHistory, createRunSnapshot } = require('../controllers/userController');
 var router = express.Router();
 
 // Health check endpoint
@@ -26,6 +26,7 @@ router.post("/editProject", editProject);
 router.post("/createRunJob", createRunJob);
 router.post("/updateRunJob", updateRunJob);
 router.post("/getRunHistory", getRunHistory);
+router.post("/deleteRunHistory", deleteRunHistory);
 router.post("/createRunSnapshot", createRunSnapshot);
 
 module.exports = router;

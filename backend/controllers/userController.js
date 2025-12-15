@@ -2,6 +2,7 @@ const userModel = require("../models/userModel");
 const projectModel = require("../models/projectModel");
 const runJobModel = require("../models/runJobModel");
 const runSnapshotModel = require("../models/runSnapshotModel");
+const shareModel = require("../models/shareModel");
 var bcrypt = require('bcryptjs');
 var jwt = require('jsonwebtoken');
 require('dotenv').config();
@@ -709,6 +710,65 @@ exports.getRunHistory = async (req, res) => {
   }
 };
 
+// Delete run history for a specific file (by entryPoint) in a project
+exports.deleteRunHistory = async (req, res) => {
+  try {
+    let { token, projectId, entryPoint } = req.body;
+
+    if (!token || !projectId || !entryPoint) {
+      return res.status(400).json({
+        success: false,
+        msg: "Token, projectId, and entryPoint are required"
+      });
+    }
+
+    let decoded = jwt.verify(token, secret);
+    let user = await userModel.findOne({ _id: decoded.userId });
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        msg: "User not found"
+      });
+    }
+
+    let project = await projectModel.findById(projectId);
+    if (!project) {
+      return res.status(404).json({
+        success: false,
+        msg: "Project not found"
+      });
+    }
+
+    // Check if user owns this project
+    if (project.owner_id.toString() !== user._id.toString()) {
+      return res.status(403).json({
+        success: false,
+        msg: "Unauthorized - you do not own this project"
+      });
+    }
+
+    // Delete all run jobs for this file (entryPoint) in this project
+    const result = await runJobModel.deleteMany({
+      project_id: projectId,
+      entry_point: entryPoint
+    });
+
+    return res.status(200).json({
+      success: true,
+      msg: "Run history deleted successfully",
+      deletedCount: result.deletedCount
+    });
+
+  } catch (error) {
+    console.error('Error in deleteRunHistory:', error);
+    return res.status(500).json({
+      success: false,
+      msg: `Error deleting history: ${error.message}`
+    });
+  }
+};
+
 // Create a run snapshot (save output)
 exports.createRunSnapshot = async (req, res) => {
   try {
@@ -744,6 +804,205 @@ exports.createRunSnapshot = async (req, res) => {
       msg: "Run snapshot created successfully",
       snapshotId: snapshot._id,
       snapshot: snapshot
+    });
+
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      msg: error.message
+    });
+  }
+};
+
+// ===== SHARING FUNCTIONS =====
+
+// Generate unique share ID
+function generateShareId() {
+  const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  let id = '';
+  for (let i = 0; i < 8; i++) {
+    id += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return id;
+}
+
+// Create Share
+exports.createShare = async (req, res) => {
+  try {
+    const { code, language, fileName, token } = req.body;
+
+    if (!code || !language || !fileName) {
+      return res.status(400).json({
+        success: false,
+        msg: "Code, language, and file name are required"
+      });
+    }
+
+    // Verify token to get user
+    let userId = null;
+    if (token) {
+      try {
+        const decoded = jwt.verify(token, secret);
+        userId = decoded.id;
+      } catch (err) {
+        // Continue without user (anonymous share)
+      }
+    }
+
+    // Create share object
+    const shareId = generateShareId();
+    const shareData = {
+      shareId: shareId,
+      code: code,
+      language: language,
+      fileName: fileName,
+      sharedBy: userId || null,
+      createdAt: new Date(),
+      expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days
+      viewCount: 0
+    };
+
+    // Store in database
+    const share = new shareModel(shareData);
+    await share.save();
+
+    return res.status(201).json({
+      success: true,
+      msg: "Share created successfully",
+      shareId: shareId
+    });
+
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      msg: error.message
+    });
+  }
+};
+
+// Get Share
+exports.getShare = async (req, res) => {
+  try {
+    const { shareId } = req.params;
+
+    if (!shareId) {
+      return res.status(400).json({
+        success: false,
+        msg: "Share ID is required"
+      });
+    }
+
+    const share = await shareModel.findOne({ shareId: shareId });
+
+    if (!share) {
+      return res.status(404).json({
+        success: false,
+        msg: "Share not found"
+      });
+    }
+
+    // Check if expired
+    if (share.expiresAt && new Date() > share.expiresAt) {
+      await shareModel.deleteOne({ _id: share._id });
+      return res.status(404).json({
+        success: false,
+        msg: "Share has expired"
+      });
+    }
+
+    // Increment view count
+    share.viewCount = (share.viewCount || 0) + 1;
+    await share.save();
+
+    return res.status(200).json({
+      success: true,
+      share: {
+        code: share.code,
+        language: share.language,
+        fileName: share.fileName,
+        createdAt: share.createdAt,
+        viewCount: share.viewCount
+      }
+    });
+
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      msg: error.message
+    });
+  }
+};
+
+// Delete Share
+exports.deleteShare = async (req, res) => {
+  try {
+    const { shareId } = req.params;
+    const { token } = req.body;
+
+    if (!shareId || !token) {
+      return res.status(400).json({
+        success: false,
+        msg: "Share ID and token are required"
+      });
+    }
+
+    // Verify token
+    const decoded = jwt.verify(token, secret);
+    const userId = decoded.id;
+
+    const share = await shareModel.findOne({ shareId: shareId });
+
+    if (!share) {
+      return res.status(404).json({
+        success: false,
+        msg: "Share not found"
+      });
+    }
+
+    // Check if user owns this share
+    if (share.sharedBy.toString() !== userId) {
+      return res.status(403).json({
+        success: false,
+        msg: "Not authorized to delete this share"
+      });
+    }
+
+    await shareModel.deleteOne({ _id: share._id });
+
+    return res.status(200).json({
+      success: true,
+      msg: "Share deleted successfully"
+    });
+
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      msg: error.message
+    });
+  }
+};
+
+// Get My Shares
+exports.getMyShares = async (req, res) => {
+  try {
+    const { token } = req.body;
+
+    if (!token) {
+      return res.status(400).json({
+        success: false,
+        msg: "Token is required"
+      });
+    }
+
+    // Verify token
+    const decoded = jwt.verify(token, secret);
+    const userId = decoded.id;
+
+    const shares = await shareModel.find({ sharedBy: userId }).sort({ createdAt: -1 });
+
+    return res.status(200).json({
+      success: true,
+      shares: shares
     });
 
   } catch (error) {

@@ -4,6 +4,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var cors = require("cors");
+var compression = require('compression');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -18,14 +19,36 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
 
-// CORS configuration for production
+// Add compression middleware for better performance with many users
+app.use(compression());
+
+// Optimize JSON parsing limits for better performance
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: false, limit: '10mb' }));
+app.use(cookieParser());
+app.use(express.static(path.join(__dirname, 'public'), { 
+  // Cache static assets for 1 hour to reduce server load
+  maxAge: '1h',
+  etag: false 
+}));
+
+// CORS configuration - allow both development and production URLs
 const corsOptions = {
-  origin: process.env.FRONTEND_URL || 'http://localhost:5173',
+  origin: function(origin, callback) {
+    const allowedOrigins = [
+      'http://localhost:5173',  // Vite dev server
+      'http://localhost:3000',  // Alternative dev
+      'http://127.0.0.1:5173',
+      process.env.FRONTEND_URL   // Production URL
+    ];
+    
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('CORS not allowed'));
+    }
+  },
   credentials: true,
   optionsSuccessStatus: 200
 };
@@ -35,6 +58,8 @@ app.use(cors(corsOptions));
 app.use((req, res, next) => {
   res.setHeader('X-Content-Type-Options', 'nosniff');
   res.setHeader('X-Frame-Options', 'DENY');
+  // Add caching headers to reduce unnecessary requests
+  res.setHeader('Cache-Control', 'public, max-age=3600');
   next();
 });
 

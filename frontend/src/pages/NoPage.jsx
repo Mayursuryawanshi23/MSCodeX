@@ -34,7 +34,7 @@ const NoPage = () => {
           </div>
           <div className="p-4 bg-blue-500/10 border border-blue-500/30 rounded-lg">
             <p className="text-sm text-blue-400 font-semibold">🔗 Navigate:</p>
-            <p className="text-sm text-gray-400 mt-2">Use the menu to explore CodeX</p>
+            <p className="text-sm text-gray-400 mt-2">Use the menu to explore CatalyX</p>
           </div>
         </div>
 

@@ -1,22 +1,23 @@
-import React, { Suspense } from 'react'
+import React, { Suspense, lazy } from 'react'
 import "./App.css";
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
-import Landing from './pages/Landing';
-import Home from './pages/Home';
-import NoPage from './pages/NoPage';
-import SignUp from './pages/SignUp';
-import Login from './pages/Login';
-import Editor from './pages/Editor';
+// Theme provider removed per request
+
+// Lazy load pages for better performance - speeds up initial load
+const Landing = lazy(() => import('./pages/Landing'));
+const Home = lazy(() => import('./pages/Home'));
+const NoPage = lazy(() => import('./pages/NoPage'));
+const SignUp = lazy(() => import('./pages/SignUp'));
+const Login = lazy(() => import('./pages/Login'));
+const Editor = lazy(() => import('./pages/Editor'));
 
 const App = () => {
   return (
-    <>
-      <BrowserRouter>
-        <Suspense fallback={<div className="h-screen bg-theme-bg flex items-center justify-center text-theme-text">Loading...</div>}>
-          <RouteHandler />
-        </Suspense>
-      </BrowserRouter>
-    </>
+    <BrowserRouter>
+      <Suspense fallback={<div className="h-screen bg-black flex items-center justify-center text-gray-100">Loading...</div>}>
+        <RouteHandler />
+      </Suspense>
+    </BrowserRouter>
   )
 };
 
