@@ -5,40 +5,62 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   build: {
-    // Enable minification for smaller bundle sizes
     minify: 'terser',
     terserOptions: {
       compress: {
-        drop_console: true, // Remove console logs in production
-        drop_debugger: true
-      }
+        drop_console: true,
+        drop_debugger: true,
+        unused: true,
+        dead_code: true,
+        passes: 2
+      },
+      mangle: true
     },
-    // Code splitting for better caching and lazy loading
     rollupOptions: {
       output: {
-        manualChunks: {
-          'monaco-editor': ['@monaco-editor/react'],
-          'vendor': ['react', 'react-router-dom', 'react-toastify'],
-        }
+        manualChunks: (id) => {
+          if (id.includes('node_modules/react') || id.includes('node_modules/react-dom')) {
+            return 'react-vendor';
+          }
+          if (id.includes('node_modules')) {
+            return 'vendor';
+          }
+          if (id.includes('monaco-editor') || id.includes('@monaco-editor')) {
+            return 'monaco-editor';
+          }
+          if (id.includes('/pages/Editor')) {
+            return 'page-editor';
+          }
+          if (id.includes('/pages/Home')) {
+            return 'page-home';
+          }
+        },
+        entryFileNames: 'js/[name]-[hash].js',
+        chunkFileNames: 'js/[name]-[hash].js',
+        assetFileNames: '[ext]/[name]-[hash].[ext]'
       }
     },
-    // Optimize assets
-    assetsInlineLimit: 4096, // Inline small assets
-    // CSS code split
+    assetsInlineLimit: 4096,
     cssCodeSplit: true,
-    // Increase chunk size warning limit for Monaco Editor
     chunkSizeWarningLimit: 1500,
-    // Production source maps (set to false to disable)
     sourcemap: false,
+    reportCompressedSize: false
   },
   server: {
-    // Enable HMR for faster dev experience
     hmr: true,
-    // Compression during dev
     middlewareMode: false,
+    preTransformRequests: ['/src/pages/Login.jsx', '/src/pages/SignUp.jsx']
   },
-  // Optimize dependencies
   optimizeDeps: {
-    include: ['react', 'react-dom', 'react-router-dom'],
+    include: ['react', 'react-dom', 'react-router-dom', 'react-toastify'],
+    exclude: ['@monaco-editor/react', 'monaco-editor', 'jspdf'],
+    esbuildOptions: {
+      target: 'esnext'
+    }
+  },
+  resolve: {
+    alias: {
+      '@': '/src'
+    }
   }
 })

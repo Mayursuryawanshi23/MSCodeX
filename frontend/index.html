@@ -46,8 +46,13 @@
     <!-- Preconnect to external resources for performance -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="dns-prefetch" href="https://localhost:3000" />
+    <link rel="preconnect" href="http://localhost:3000" />
     
     <!-- Performance optimization hints -->
+    <!-- Preload critical auth pages for faster login/signup -->
+    <link rel="modulepreload" href="/src/pages/Login.jsx" />
+    <link rel="modulepreload" href="/src/pages/SignUp.jsx" />
+    <!-- Prefetch non-critical pages -->
     <link rel="prefetch" href="/src/pages/Home.jsx" />
     <link rel="prefetch" href="/src/pages/Editor.jsx" />
     

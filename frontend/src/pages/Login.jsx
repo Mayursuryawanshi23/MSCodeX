@@ -14,7 +14,13 @@ const Login = () => {
   const submitForm = (e) => {
     e.preventDefault();
     setLoading(true);
+    
+    // Create abort controller for request timeout (10 seconds)
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 10000);
+    
     fetch(api_base_url + "/login", {
+      signal: controller.signal,
       mode: "cors",
       method: "POST",
       headers: {
@@ -25,6 +31,7 @@ const Login = () => {
         pwd: pwd
       })
     }).then(res => res.json()).then(data => {
+      clearTimeout(timeoutId);
       setLoading(false);
       if (data.success) {
         localStorage.setItem("token", data.token);
@@ -32,14 +39,19 @@ const Login = () => {
         toast.success("Login successful!");
         setTimeout(() => {
           window.location.href = "/home";
-        }, 500);
+        }, 300);
       }
       else {
         toast.error(data.msg || "Login failed!");
       }
     }).catch(err => {
+      clearTimeout(timeoutId);
       setLoading(false);
-      toast.error("Network error. Please try again!");
+      if (err.name === 'AbortError') {
+        toast.error("Request timeout. Please try again!");
+      } else {
+        toast.error("Network error. Please try again!");
+      }
     });
   };
 
