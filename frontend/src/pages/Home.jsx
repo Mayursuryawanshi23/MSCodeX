@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Navbar from "../components/Navbar";
+import Breadcrumbs from '../components/Breadcrumbs';
 import { api_base_url } from '../helper';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -134,7 +135,7 @@ const Home = () => {
   };
 
   const openProject = (projectId) => {
-    navigate("/editior/" + projectId);
+    navigate("/editor/" + projectId);
   };
 
   return (
@@ -156,6 +157,7 @@ const Home = () => {
 
       <div className="relative z-10">
         <Navbar />
+        <Breadcrumbs />
 
       {/* Header Section - Mobile Friendly */}
       <div className="bg-gradient-to-r from-blue-600/8 via-green-600/8 to-blue-600/8 border-b border-gray-800/50 px-4 sm:px-8 py-6 sm:py-8">
@@ -191,7 +193,7 @@ const Home = () => {
       </div>
 
       {/* Main Content - Mobile Optimized */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-8 py-6 sm:py-12">
+      <div id="main" className="max-w-7xl mx-auto px-4 sm:px-8 py-6 sm:py-12">
         {/* Stats Cards - Mobile Friendly Grid */}
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4 mb-8 sm:mb-10">
           {/* Total Projects */}

@@ -1,14 +1,23 @@
 import React, { Suspense, lazy, memo } from 'react'
 import "./App.css";
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import ProtectedRoute from './components/ProtectedRoute';
+import SkipToContent from './components/SkipToContent';
 
 // Lazy load pages for better performance - speeds up initial load
-const Landing = lazy(() => import('./pages/Landing'));
-const Home = lazy(() => import('./pages/Home'));
-const NoPage = lazy(() => import('./pages/NoPage'));
-const SignUp = lazy(() => import('./pages/SignUp'));
-const Login = lazy(() => import('./pages/Login'));
-const Editor = lazy(() => import('./pages/Editor'));
+// also attach a .preload method so links can trigger prefetch on hover/focus
+const lazyWithPreload = (factory) => {
+  const Component = lazy(factory);
+  Component.preload = factory;
+  return Component;
+};
+
+const Landing = lazyWithPreload(() => import('./pages/Landing'));
+const Home = lazyWithPreload(() => import('./pages/Home'));
+const NoPage = lazyWithPreload(() => import('./pages/NoPage'));
+const SignUp = lazyWithPreload(() => import('./pages/SignUp'));
+const Login = lazyWithPreload(() => import('./pages/Login'));
+const Editor = lazyWithPreload(() => import('./pages/Editor'));
 
 // Loading fallback component
 const LoadingFallback = memo(() => (
@@ -27,6 +36,7 @@ LoadingFallback.displayName = 'LoadingFallback';
 const App = () => {
   return (
     <BrowserRouter>
+      <SkipToContent />
       <Suspense fallback={<LoadingFallback />}>
         <RouteHandler />
       </Suspense>
@@ -35,16 +45,16 @@ const App = () => {
 };
 
 const RouteHandler = memo(() => {
-  const isLoggedIn = localStorage.getItem("isLoggedIn");
   return (
     <>
       <Routes>
-        <Route path="/" element={isLoggedIn ? <Navigate to={"/home"}/> : <Landing />} />
-        <Route path="/home" element={isLoggedIn ? <Home /> : <Navigate to={"/login"}/>} />
+        <Route path="/" element={<Landing />} />
+        <Route path="/home" element={<ProtectedRoute><Home /></ProtectedRoute>} />
         <Route path="/signUp" element={<SignUp />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/editor" element={isLoggedIn ? <Editor /> : <Navigate to={"/login"}/>} />
-        <Route path="/editior/:id" element={isLoggedIn ? <Editor /> : <Navigate to={"/login"}/>} />
+        <Route path="/editor" element={<ProtectedRoute><Editor /></ProtectedRoute>} />
+        {/* fixed route name to /editor/:id */}
+        <Route path="/editor/:id" element={<ProtectedRoute><Editor /></ProtectedRoute>} />
         <Route path="*" element={<NoPage />} />
       </Routes>
     </>

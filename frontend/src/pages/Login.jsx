@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { api_base_url } from '../helper';
 
@@ -10,6 +10,7 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
+  const location = useLocation();
 
   const submitForm = (e) => {
     e.preventDefault();
@@ -35,10 +36,13 @@ const Login = () => {
       setLoading(false);
       if (data.success) {
         localStorage.setItem("token", data.token);
-        localStorage.setItem("isLoggedIn", true);
+        localStorage.setItem("isLoggedIn", 'true');
         toast.success("Login successful!");
+        // handle returnTo query param
+        const params = new URLSearchParams(location.search);
+        const returnTo = params.get('returnTo') || '/home';
         setTimeout(() => {
-          window.location.href = "/home";
+          navigate(returnTo, { replace: true });
         }, 300);
       }
       else {
