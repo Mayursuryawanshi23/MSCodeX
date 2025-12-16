@@ -629,14 +629,14 @@ const Editor = () => {
               </button>
               <span className="text-lg mr-1">📁</span>
               <span className="flex-1 truncate text-sm">{node.name}</span>
-              <div className="opacity-0 group-hover:opacity-100 flex gap-1 ml-2">
+              <div className={`${isMobile ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'} flex gap-1 ml-2`}>
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
                     setCreateContext({ parentId: node.id, type: 'file' });
                     setShowCreateModal(true);
                   }}
-                  className="px-1.5 py-0.5 bg-green-600/20 hover:bg-green-600/40 text-green-300 text-xs rounded transition-colors"
+                  className="px-1.5 py-0.5 bg-green-600/20 hover:bg-green-600/40 text-green-300 text-xs rounded transition-colors active:scale-95"
                   title="New File"
                 >
                   +F
@@ -647,7 +647,7 @@ const Editor = () => {
                     setCreateContext({ parentId: node.id, type: 'folder' });
                     setShowCreateModal(true);
                   }}
-                  className="px-1.5 py-0.5 bg-blue-600/20 hover:bg-blue-600/40 text-blue-300 text-xs rounded transition-colors"
+                  className="px-1.5 py-0.5 bg-blue-600/20 hover:bg-blue-600/40 text-blue-300 text-xs rounded transition-colors active:scale-95"
                   title="New Folder"
                 >
                   +D
@@ -657,7 +657,7 @@ const Editor = () => {
                     e.stopPropagation();
                     deleteItem(node.id);
                   }}
-                  className="px-1.5 py-0.5 bg-red-600/20 hover:bg-red-600/40 text-red-300 text-xs rounded transition-colors"
+                  className="px-1.5 py-0.5 bg-red-600/20 hover:bg-red-600/40 text-red-300 text-xs rounded transition-colors active:scale-95"
                   title="Delete"
                 >
                   ✕
@@ -676,13 +676,13 @@ const Editor = () => {
               >
                 {node.name}
               </span>
-              <div className="opacity-0 group-hover:opacity-100 flex gap-1 ml-2">
+              <div className={`${isMobile ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'} flex gap-1 ml-2`}>
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
                     deleteItem(node.id);
                   }}
-                  className="px-1.5 py-0.5 bg-red-600/20 hover:bg-red-600/40 text-red-300 text-xs rounded transition-colors"
+                  className="px-1.5 py-0.5 bg-red-600/20 hover:bg-red-600/40 text-red-300 text-xs rounded transition-colors active:scale-95"
                   title="Delete"
                 >
                   ✕
@@ -1213,31 +1213,31 @@ const Editor = () => {
                 <div className="flex gap-2">
                   <button
                     onClick={() => saveFile(false)}
-                    className="px-2 py-1 text-xs bg-green-600 hover:bg-green-700 text-white rounded transition-all duration-200"
-                title="Save"
-              >
-                {isSaving ? 'Saving...' : '💾 Save'}
-              </button>
-              <button
-                onClick={() => {
-                  setCreateContext({ parentId: null, type: 'file' });
-                  setShowCreateModal(true);
-                }}
-                className="flex-1 px-2 py-1 text-xs bg-green-600/20 hover:bg-green-500/40 text-green-300 rounded transition-all duration-200 border border-green-500/30"
-              >
-                +F
-              </button>
-              <button
-                onClick={() => {
-                  setCreateContext({ parentId: null, type: 'folder' });
-                  setShowCreateModal(true);
-                }}
-                className="flex-1 px-2 py-1 text-xs bg-blue-600/20 hover:bg-blue-500/40 text-blue-300 rounded transition-all duration-200 border border-blue-500/30"
-              >
-                +D
-              </button>
-            </div>
-          </div>
+                    className="px-2 py-1 text-xs bg-green-600 hover:bg-green-700 text-white rounded transition-all duration-200 active:scale-95"
+                    title="Save"
+                  >
+                    {isSaving ? 'Saving...' : '💾 Save'}
+                  </button>
+                  <button
+                    onClick={() => {
+                      setCreateContext({ parentId: null, type: 'file' });
+                      setShowCreateModal(true);
+                    }}
+                    className="flex-1 px-2 py-1 text-xs bg-green-600/20 hover:bg-green-500/40 text-green-300 rounded transition-all duration-200 border border-green-500/30 active:scale-95"
+                  >
+                    +F
+                  </button>
+                  <button
+                    onClick={() => {
+                      setCreateContext({ parentId: null, type: 'folder' });
+                      setShowCreateModal(true);
+                    }}
+                    className="flex-1 px-2 py-1 text-xs bg-blue-600/20 hover:bg-blue-500/40 text-blue-300 rounded transition-all duration-200 border border-blue-500/30 active:scale-95"
+                  >
+                    +D
+                  </button>
+                </div>
+              </div>
 
           {/* File Tree */}
           <div className="p-2">
@@ -1283,7 +1283,7 @@ const Editor = () => {
                       saveFile(false);
                       setShowMobileFileExplorer(false);
                     }}
-                    className="flex-1 px-2 py-2 text-xs bg-green-600 hover:bg-green-700 text-white rounded transition-all duration-200 font-medium"
+                    className="flex-1 px-2 py-2 text-xs bg-green-600 hover:bg-green-700 text-white rounded transition-all duration-200 font-medium active:scale-95"
                     title="Save"
                   >
                     💾 Save
@@ -1293,7 +1293,7 @@ const Editor = () => {
                       setCreateContext({ parentId: null, type: 'file' });
                       setShowCreateModal(true);
                     }}
-                    className="flex-1 px-2 py-2 text-xs bg-green-600/20 hover:bg-green-500/40 text-green-300 rounded transition-all duration-200 font-medium border border-green-500/30"
+                    className="flex-1 px-2 py-2 text-xs bg-green-600/20 hover:bg-green-500/40 text-green-300 rounded transition-all duration-200 font-medium border border-green-500/30 active:scale-95"
                   >
                     +F
                   </button>
@@ -1302,7 +1302,7 @@ const Editor = () => {
                       setCreateContext({ parentId: null, type: 'folder' });
                       setShowCreateModal(true);
                     }}
-                    className="flex-1 px-2 py-2 text-xs bg-blue-600/20 hover:bg-blue-500/40 text-blue-300 rounded transition-all duration-200 font-medium border border-blue-500/30"
+                    className="flex-1 px-2 py-2 text-xs bg-blue-600/20 hover:bg-blue-500/40 text-blue-300 rounded transition-all duration-200 font-medium border border-blue-500/30 active:scale-95"
                   >
                     +D
                   </button>

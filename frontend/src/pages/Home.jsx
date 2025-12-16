@@ -14,10 +14,10 @@ const Home = () => {
 
   const navigate = useNavigate();
 
-  // Fetch user data and projects
+  // Fetch user data
   const getUserData = async () => {
     const token = localStorage.getItem("token");
-    if (!token) return; // Guard: don't call API if no token
+    if (!token) return;
     try {
       const res = await fetch(api_base_url + "/getUserData", {
         mode: "cors",
@@ -41,7 +41,7 @@ const Home = () => {
 
   const getProjects = async () => {
     const token = localStorage.getItem("token");
-    if (!token) return; // Guard: don't call API if no token
+    if (!token) return;
     try {
       const res = await fetch(api_base_url + "/getProjects", {
         mode: "cors",
@@ -67,12 +67,6 @@ const Home = () => {
     getUserData();
     getProjects();
   }, []);
-
-  // prefer multiple possible name fields returned by backend
-  const setUserNameFromData = (user) => {
-    const name = (user && (user.name || user.username || user.email)) || "Developer";
-    setUserName(name);
-  };
 
   const createProject = async () => {
     if (!projectName.trim()) {
@@ -203,12 +197,12 @@ const Home = () => {
           {/* Total Projects */}
           <div className="bg-gray-900/50 border border-gray-800 rounded-lg p-3 sm:p-4 backdrop-blur hover:border-gray-700 transition-all duration-200">
             <p className="text-gray-400 text-xs sm:text-sm mb-1 font-medium">Total</p>
-            <p className="text-2xl sm:text-3xl font-bold text-green-400">{projects.length}</p>
+            <p className="text-2xl sm:text-3xl font-bold text-green-400">{projects?.length || 0}</p>
           </div>
           {/* Recent Projects */}
           <div className="bg-gray-900/50 border border-gray-800 rounded-lg p-3 sm:p-4 backdrop-blur hover:border-gray-700 transition-all duration-200">
             <p className="text-gray-400 text-xs sm:text-sm mb-1 font-medium">Active</p>
-            <p className="text-2xl sm:text-3xl font-bold text-blue-400">{projects.length > 0 ? projects.length : 0}</p>
+            <p className="text-2xl sm:text-3xl font-bold text-blue-400">{projects?.length > 0 ? projects.length : 0}</p>
           </div>
           {/* Status */}
           <div className="bg-gray-900/50 border border-gray-800 rounded-lg p-3 sm:p-4 backdrop-blur hover:border-gray-700 transition-all duration-200">
@@ -222,7 +216,7 @@ const Home = () => {
           <div className="flex items-center justify-between mb-4 sm:mb-6">
             <h2 className="text-xl sm:text-2xl font-bold text-white">📁 Your Projects</h2>
             <span className="bg-gradient-to-r from-green-600/20 to-blue-600/20 border border-green-500/30 text-gray-300 px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-medium">
-              {projects.length}
+              {projects?.length || 0}
             </span>
           </div>
 

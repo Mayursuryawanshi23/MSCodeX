@@ -1,0 +1,79 @@
+# Apache .htaccess file for performance optimization and SEO
+# Place this in your web server root directory (frontend/dist/)
+
+# Enable GZIP compression
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/javascript application/json
+</IfModule>
+
+# Set expires headers for better caching
+<IfModule mod_expires.c>
+  ExpiresActive On
+  
+  # HTML files - cache for 1 hour
+  ExpiresByType text/html "access plus 1 hour"
+  
+  # CSS and JavaScript - cache for 30 days
+  ExpiresByType text/css "access plus 30 days"
+  ExpiresByType application/javascript "access plus 30 days"
+  ExpiresByType text/javascript "access plus 30 days"
+  
+  # Images - cache for 365 days
+  ExpiresByType image/jpeg "access plus 365 days"
+  ExpiresByType image/gif "access plus 365 days"
+  ExpiresByType image/png "access plus 365 days"
+  ExpiresByType image/webp "access plus 365 days"
+  ExpiresByType image/svg+xml "access plus 365 days"
+  
+  # Fonts - cache for 365 days
+  ExpiresByType font/ttf "access plus 365 days"
+  ExpiresByType font/otf "access plus 365 days"
+  ExpiresByType font/woff "access plus 365 days"
+  ExpiresByType font/woff2 "access plus 365 days"
+  
+  # Media - cache for 30 days
+  ExpiresByType video/mp4 "access plus 30 days"
+  ExpiresByType audio/mpeg "access plus 30 days"
+</IfModule>
+
+# Add cache control headers
+<IfModule mod_headers.c>
+  # Cache HTML for 1 hour
+  <FilesMatch "\.(html|php)$">
+    Header set Cache-Control "max-age=3600, public"
+  </FilesMatch>
+  
+  # Cache assets for 1 year
+  <FilesMatch "\.(js|css|jpg|jpeg|png|gif|ico|svg|woff|woff2|ttf|eot|otf)$">
+    Header set Cache-Control "max-age=31536000, public, immutable"
+  </FilesMatch>
+  
+  # Add security headers
+  Header set X-Content-Type-Options "nosniff"
+  Header set X-Frame-Options "SAMEORIGIN"
+  Header set X-XSS-Protection "1; mode=block"
+  Header set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
+# Enable mod_rewrite for SPA routing
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+  
+  # Don't rewrite files or directories that exist
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  
+  # Rewrite all non-existent requests to index.html
+  RewriteRule ^ index.html [QSA,L]
+</IfModule>
+
+# Disable directory listing
+Options -Indexes
+
+# Force HTTPS (uncomment when deployed with SSL)
+# <IfModule mod_rewrite.c>
+#   RewriteEngine On
+#   RewriteCond %{HTTPS} off
+#   RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+# </IfModule>

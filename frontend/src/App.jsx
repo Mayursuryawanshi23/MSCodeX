@@ -1,7 +1,6 @@
-import React, { Suspense, lazy } from 'react'
+import React, { Suspense, lazy, memo } from 'react'
 import "./App.css";
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
-// Theme provider removed per request
 
 // Lazy load pages for better performance - speeds up initial load
 const Landing = lazy(() => import('./pages/Landing'));
@@ -11,17 +10,31 @@ const SignUp = lazy(() => import('./pages/SignUp'));
 const Login = lazy(() => import('./pages/Login'));
 const Editor = lazy(() => import('./pages/Editor'));
 
+// Loading fallback component
+const LoadingFallback = memo(() => (
+  <div className="h-screen bg-black flex items-center justify-center text-gray-100">
+    <div className="text-center">
+      <div className="animate-spin mb-4">
+        <div className="w-12 h-12 border-4 border-gray-800 border-t-green-400 rounded-full"></div>
+      </div>
+      <p>Loading...</p>
+    </div>
+  </div>
+));
+
+LoadingFallback.displayName = 'LoadingFallback';
+
 const App = () => {
   return (
     <BrowserRouter>
-      <Suspense fallback={<div className="h-screen bg-black flex items-center justify-center text-gray-100">Loading...</div>}>
+      <Suspense fallback={<LoadingFallback />}>
         <RouteHandler />
       </Suspense>
     </BrowserRouter>
   )
 };
 
-const RouteHandler = () => {
+const RouteHandler = memo(() => {
   const isLoggedIn = localStorage.getItem("isLoggedIn");
   return (
     <>
@@ -36,6 +49,8 @@ const RouteHandler = () => {
       </Routes>
     </>
   )
-}
+});
+
+RouteHandler.displayName = 'RouteHandler';
 
 export default App

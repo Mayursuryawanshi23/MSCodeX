@@ -1,13 +1,107 @@
 <!doctype html>
 <html lang="en">
   <head>
+    <!-- Character encoding -->
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>CODEX - Cloud IDE</title>
+    
+    <!-- Viewport for responsive design -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    
+    <!-- Primary Meta Tags for SEO -->
+    <title>CatalyX - Cloud IDE</title>
+    <meta name="title" content="🚀 CatalyX - Free Cloud-Based Code Editor & Compiler" />
+    <meta name="description" content="CatalyX is a powerful, free cloud-based IDE for writing, testing, and executing code in multiple languages. Compile Python, JavaScript, Java, C++, Go, and more online. No installation required." />
+    <meta name="keywords" content="online IDE, cloud code editor, free compiler, python IDE, javascript IDE, code execution, online coding platform, CatalyX" />
+    <meta name="author" content="CatalyX Team" />
+    <meta name="language" content="English" />
+    <meta name="robots" content="index, follow" />
+    <meta name="revisit-after" content="7 days" />
+    
+    <!-- Canonical URL (update with your actual domain) -->
+    <link rel="canonical" href="https://catalyx-ide.com" />
+    
+    <!-- Open Graph Tags (for social media sharing) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://catalyx-ide.com" />
+    <meta property="og:title" content="🚀 CatalyX - Free Cloud-Based Code Editor & Compiler" />
+    <meta property="og:description" content="CatalyX is a powerful, free cloud-based IDE for writing, testing, and executing code in multiple languages. No installation required." />
+    <meta property="og:image" content="/code2.png" />
+    <meta property="og:site_name" content="CatalyX" />
+    <meta property="og:locale" content="en_US" />
+    
+    <!-- Twitter Card Tags -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://catalyx-ide.com" />
+    <meta property="twitter:title" content="🚀 CatalyX - Free Cloud-Based Code Editor & Compiler" />
+    <meta property="twitter:description" content="CatalyX is a powerful, free cloud-based IDE for writing, testing, and executing code in multiple languages." />
+    <meta property="twitter:image" content="/code2.png" />
+    
+    <!-- Favicon and App Icons - CatalyX Logo with gradient (CY) -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'><defs><linearGradient id='grad' x1='0%' y1='0%' x2='100%' y2='100%'><stop offset='0%' style='stop-color:%2310b981;stop-opacity:1' /><stop offset='100%' style='stop-color:%233b82f6;stop-opacity:1' /></linearGradient></defs><rect x='2' y='2' width='36' height='36' rx='8' fill='url(%23grad)'/><text x='50%' y='55%' font-size='24' font-weight='bold' text-anchor='middle' dominant-baseline='middle' fill='%23000000' font-family='system-ui'>CY</text></svg>" />
+    <link rel="shortcut icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'><defs><linearGradient id='grad' x1='0%' y1='0%' x2='100%' y2='100%'><stop offset='0%' style='stop-color:%2310b981;stop-opacity:1' /><stop offset='100%' style='stop-color:%233b82f6;stop-opacity:1' /></linearGradient></defs><rect x='2' y='2' width='36' height='36' rx='8' fill='url(%23grad)'/><text x='50%' y='55%' font-size='24' font-weight='bold' text-anchor='middle' dominant-baseline='middle' fill='%23000000' font-family='system-ui'>CY</text></svg>" />
+    <link rel="apple-touch-icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'><defs><linearGradient id='grad' x1='0%' y1='0%' x2='100%' y2='100%'><stop offset='0%' style='stop-color:%2310b981;stop-opacity:1' /><stop offset='100%' style='stop-color:%233b82f6;stop-opacity:1' /></linearGradient></defs><rect x='2' y='2' width='36' height='36' rx='8' fill='url(%23grad)'/><text x='50%' y='55%' font-size='24' font-weight='bold' text-anchor='middle' dominant-baseline='middle' fill='%23000000' font-family='system-ui'>CY</text></svg>" />
+    <meta name="theme-color" content="#1f2937" />
+    <meta name="msapplication-TileColor" content="#1f2937" />
+    
+    <!-- Preconnect to external resources for performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="dns-prefetch" href="https://localhost:3000" />
+    
+    <!-- Performance optimization hints -->
+    <link rel="prefetch" href="/src/pages/Home.jsx" />
+    <link rel="prefetch" href="/src/pages/Editor.jsx" />
+    
+    <!-- JSON-LD Structured Data for Search Engines -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "CodeX IDE",
+      "description": "A free cloud-based IDE for writing, testing, and executing code in multiple programming languages",
+      "url": "https://codex-ide.com",
+      "image": "/code2.png",
+      "applicationCategory": "DeveloperApplication",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "operatingSystem": "Web Browser",
+      "featureList": [
+        "Code Editor",
+        "Multiple Language Support",
+        "Online Compiler",
+        "Code Execution",
+        "Project Management",
+        "Real-time Collaboration"
+      ],
+      "author": {
+        "@type": "Organization",
+        "name": "CodeX Team"
+      }
+    }
+    </script>
+    
+    <!-- Additional structured data for organization -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "CodeX",
+      "url": "https://codex-ide.com",
+      "logo": "/code2.png",
+      "description": "Free cloud-based IDE for coding and compilation",
+      "sameAs": [
+        "https://twitter.com/codex",
+        "https://github.com/codex"
+      ]
+    }
+    </script>
   </head>
   <body>
     <div id="root"></div>
+    
+    <!-- Main React app -->
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
